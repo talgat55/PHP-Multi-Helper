@@ -15,40 +15,72 @@
 get_header(); ?>
 
 <div id="primary" class="content-area">
-	<main id="main" class="site-main" role="main">
+	<div class="container">
+        <div class="row">
+            <?php
+            $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+            $args = [
+                'post_type' => 'post',
+                'posts_per_page' => '12',
+                'post_status' => 'publish',
+                'orderby' => 'date',
+                'order' => 'DESC',
+                'paged' => $paged,
+                'page' => $paged
+            ];
 
-		<?php // Show the selected frontpage content.
-		if ( have_posts() ) :
-			while ( have_posts() ) : the_post();
-				get_template_part( 'template-parts/page/content', 'front-page' );
-			endwhile;
-		else :
-			get_template_part( 'template-parts/post/content', 'none' );
-		endif; ?>
+            $query = new WP_Query($args); ?>
+            <div class="clearfix">
+            <ul class="lists">
+                <?php
+                while ($query->have_posts()) : $query->the_post();
+                    $post_id = $query->post->ID;
+                    $anons = get_field('anons', $post_id);
+                   // $img_url = wp_get_attachment_url( get_post_thumbnail_id($post_id),'full');
+                    ?>
+                    <li class="item col-sm-4 col-xs-12">
+                        <div class="item-walp">
+                         <div class="pre-block">
+                             <i class="fas fa-pencil-alt"></i>
+                         </div>
+                        <div class="category">
+                            <?php   echo  get_the_category( $post_id)[0]->name;  ?>
+                        </div>
+                        <h3 class="title">
+                            <a href="<?= get_the_permalink($post_id) ?>">
+                            <?= get_the_title($post_id) ?>
+                            </a>
+                        </h3>
+                        <div class="date">
+                           <?=get_the_date('d,  M, Y') ?>
+                        </div>
+                        <div class="anons">
+                            <?= $anons; ?>
+                        </div>
+                        <a href="<?= get_the_permalink($post_id) ?>" class="link-to-article"><?  _e('Читать далее', 'light'); ?></a>
+                        </div>
+                    </li>
+                <?php  endwhile; ?>
+            </ul>
+            </div>
+            <div class="col-sm-12 col-xs-12">
 
-		<?php
-		// Get each of our panels and show the post data.
-		if ( 0 !== twentyseventeen_panel_count() || is_customize_preview() ) : // If we have pages to show.
 
-			/**
-			 * Filter number of front page sections in Twenty Seventeen.
-			 *
-			 * @since Twenty Seventeen 1.0
-			 *
-			 * @param int $num_sections Number of front page sections.
-			 */
-			$num_sections = apply_filters( 'twentyseventeen_front_page_sections', 4 );
-			global $twentyseventeencounter;
+            <?php
 
-			// Create a setting and control for each of the sections available in the theme.
-			for ( $i = 1; $i < ( 1 + $num_sections ); $i++ ) {
-				$twentyseventeencounter = $i;
-				twentyseventeen_front_page_section( null, $i );
-			}
-
-	endif; // The if ( 0 !== twentyseventeen_panel_count() ) ends here. ?>
-
-	</main><!-- #main -->
+            $GLOBALS['wp_query'] = $query;
+            the_posts_pagination([
+                'show_all' => false,
+                'prev_text' => __('Предыдущая страница', 'light'),
+                'next_text' => __('Следующая страница', 'light'),
+                'end_size' => '2',     // количество страниц на концах
+                'mid_size' => '2',
+                'screen_reader_text' => __(' ', 'light'),
+            ]);
+            ?>
+            </div>
+        </div>
+    </div>
 </div><!-- #primary -->
 
 <?php get_footer();
