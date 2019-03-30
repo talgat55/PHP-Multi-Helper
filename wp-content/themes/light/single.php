@@ -28,7 +28,17 @@ get_header(); ?>
                             while ( have_posts() ) : the_post();
                             ?>
                                 <div class="category">
-                                    <?php   echo  get_the_category(get_the_ID())[0]->name;  ?>
+                                    <?php
+                                    $i = 0;
+                                    foreach (get_the_category(get_the_ID()) as  $item){
+                                        if($i > 0) {
+                                            echo ', ';
+                                        }
+                                        echo $item->name;
+
+                                        $i++;
+                                    }
+                                    ?>
                                 </div>
                                 <h3 class="title">
                                         <?= get_the_title(get_the_ID()) ?>

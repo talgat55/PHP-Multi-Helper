@@ -44,7 +44,17 @@ get_header(); ?>
                              <i class="fas fa-pencil-alt"></i>
                          </div>
                         <div class="category">
-                            <?php   echo  get_the_category( $post_id)[0]->name;  ?>
+                            <?php
+                            $i = 0;
+                            foreach (get_the_category(get_the_ID()) as  $item){
+                                if($i > 0) {
+                                    echo ', ';
+                                }
+                                echo $item->name;
+
+                                $i++;
+                            }
+                            ?>
                         </div>
                         <h3 class="title">
                             <a href="<?= get_the_permalink($post_id) ?>">
