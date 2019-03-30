@@ -18,7 +18,7 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="profile" href="http://gmpg.org/xfn/11">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900|Open+Sans" rel="stylesheet">
     <?php wp_head(); ?>
 </head>
 
@@ -59,7 +59,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" >
+                                    <a href="/search" >
                                         <i class="fas fa-search"></i>
                                     </a>
                                 </li>
@@ -77,7 +77,19 @@
         <div class="header-bottom">
             <div class="container">
                 <div class="row">
-                    <img src="<?php echo get_theme_file_uri('/assets/images/bg.jpg') ?>" alt="<?php  _e('картинка', 'light'); ?>">
+                    <?php if(is_single()){
+                        if(get_post_thumbnail_id(get_the_ID())){
+                        ?>
+                        <img class="single-news-image"  src=" <?= wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'full')[0]; ?>"
+                             alt="<?=get_the_title(get_the_ID());?>"/>
+                    <?php }  else{?>
+                            <img src="<?php echo get_theme_file_uri('/assets/images/bg2.jpg') ?>" alt="<?php  _e('картинка', 'light'); ?>">
+                    <?php   }
+                    }else{  ?>
+                            <img src="<?php echo get_theme_file_uri('/assets/images/bg2.jpg') ?>" alt="<?php  _e('картинка', 'light'); ?>">
+                    <?php } ?>
+
+
                 </div>
             </div>
 

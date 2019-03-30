@@ -11,12 +11,14 @@ function th_scripts()
     wp_enqueue_style('th-style', get_stylesheet_uri());
     wp_enqueue_style('bootstrapcdn', get_theme_file_uri('/assets/css/bootstrap.min.css'), array(), '');
     wp_enqueue_style('fontawesome-all', get_theme_file_uri('/assets/css/fontawesome-all.css'), array(), '');
+    wp_enqueue_style('prism-all', get_theme_file_uri('/assets/css/prism.css'), array(), '');
 
     wp_enqueue_style('main-style', get_theme_file_uri('/assets/css/style.css'), array(), '');
 
 
     wp_enqueue_script('jquery', get_theme_file_uri('/assets/js/jquery-3.2.1.min.js'), array(), '');
     wp_enqueue_script('isotope', get_theme_file_uri('/assets/js/isotope.pkgd.min.js'), array(), '');
+    wp_enqueue_script('prism-sj', get_theme_file_uri('/assets/js/prism.js'), array(), '');
     wp_enqueue_script('default', get_theme_file_uri('/assets/js/default.js'), array(), '');
 //
 //    wp_enqueue_style('lg-transitions', get_theme_file_uri('/assets/css/lg-transitions.css'), array(), '');
@@ -47,3 +49,19 @@ function th_scripts()
 }
 
 add_action('wp_enqueue_scripts', 'th_scripts');
+
+
+
+add_action( 'widgets_init', 'register_my_widgets' );
+function register_my_widgets(){
+    register_sidebar( array(
+        'name'          => sprintf(__('Sidebar %d'), 1 ),
+        'id'            => "sidebar-1",
+        'description'   => '',
+        'class'         => '',
+        'before_widget' => '<li id="%1$s" class="widget %2$s">',
+        'after_widget'  => "</li>\n",
+        'before_title'  => '<h2 class="widgettitle">',
+        'after_title'   => "</h2>\n",
+    ) );
+}

@@ -14,48 +14,78 @@ get_header(); ?>
 
 <div class="wrap">
 
-	<?php if ( have_posts() ) : ?>
-		<header class="page-header">
-			<?php
-				the_archive_title( '<h1 class="page-title">', '</h1>' );
-				the_archive_description( '<div class="taxonomy-description">', '</div>' );
-			?>
-		</header><!-- .page-header -->
-	<?php endif; ?>
+
 
 	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+		<div class="container">
+            <div class="row">
+
+
 
 		<?php
 		if ( have_posts() ) : ?>
-			<?php
-			/* Start the Loop */
-			while ( have_posts() ) : the_post();
 
-				/*
-				 * Include the Post-Format-specific template for the content.
-				 * If you want to override this in a child theme, then include a file
-				 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-				 */
-				get_template_part( 'template-parts/post/content', get_post_format() );
+                <div class="clearfix">
+                    <ul class="lists">
+                        <?php
+                        while (have_posts()) : the_post();
+                            $post_id = get_the_ID();
+                            $anons = get_field('anons', $post_id);
+                            // $img_url = wp_get_attachment_url( get_post_thumbnail_id($post_id),'full');
+                            ?>
+                            <li class="item col-sm-4 col-xs-12">
+                                <div class="item-walp">
+                                    <div class="pre-block">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </div>
+                                    <div class="category">
+                                        <?php   echo  get_the_category( $post_id)[0]->name;  ?>
+                                    </div>
+                                    <h3 class="title">
+                                        <a href="<?= get_the_permalink($post_id) ?>">
+                                            <?= get_the_title($post_id) ?>
+                                        </a>
+                                    </h3>
+                                    <div class="date">
+                                        <?=get_the_date('d,  M, Y') ?>
+                                    </div>
+                                    <div class="anons">
+                                        <?= $anons; ?>
+                                    </div>
+                                    <a href="<?= get_the_permalink($post_id) ?>" class="link-to-article"><?  _e('Читать далее', 'light'); ?></a>
+                                </div>
+                            </li>
+                        <?php  endwhile; ?>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-xs-12">
 
-			endwhile;
 
-			the_posts_pagination( array(
-				'prev_text' => twentyseventeen_get_svg( array( 'icon' => 'arrow-left' ) ) . '<span class="screen-reader-text">' . __( 'Previous page', 'twentyseventeen' ) . '</span>',
-				'next_text' => '<span class="screen-reader-text">' . __( 'Next page', 'twentyseventeen' ) . '</span>' . twentyseventeen_get_svg( array( 'icon' => 'arrow-right' ) ),
-				'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentyseventeen' ) . ' </span>',
-			) );
+                    <?php
+
+                    the_posts_pagination([
+                        'show_all' => false,
+                        'prev_text' => __('Предыдущая страница', 'light'),
+                        'next_text' => __('Следующая страница', 'light'),
+                        'end_size' => '2',     // количество страниц на концах
+                        'mid_size' => '2',
+                        'screen_reader_text' => __(' ', 'light'),
+                    ]);
+                    ?>
+                </div>
+                <?php
+
+
 
 		else :
 
-			get_template_part( 'template-parts/post/content', 'none' );
+			 echo 'Нет записей';
 
 		endif; ?>
 
-		</main><!-- #main -->
+            </div>
+        </div>
 	</div><!-- #primary -->
-	<?php get_sidebar(); ?>
 </div><!-- .wrap -->
 
 <?php get_footer();

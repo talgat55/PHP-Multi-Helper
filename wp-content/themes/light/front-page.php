@@ -55,7 +55,7 @@ get_header(); ?>
                            <?=get_the_date('d,  M, Y') ?>
                         </div>
                         <div class="anons">
-                            <?= $anons; ?>
+                            <?= strip_tags($anons); ?>
                         </div>
                         <a href="<?= get_the_permalink($post_id) ?>" class="link-to-article"><?  _e('Читать далее', 'light'); ?></a>
                         </div>
